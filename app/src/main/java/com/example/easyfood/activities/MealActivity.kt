@@ -15,12 +15,12 @@ import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.MealViewModel
 
 class MealActivity : AppCompatActivity() {
-    private lateinit var mealId : String
-    private lateinit var mealName : String
-    private lateinit var mealThumb : String
+    private lateinit var mealId: String
+    private lateinit var mealName: String
+    private lateinit var mealThumb: String
     private lateinit var binding: ActivityMealBinding
-    private lateinit var mealMvvm : MealViewModel
-    private lateinit var youtubeLink : String
+    private lateinit var mealMvvm: MealViewModel
+    private lateinit var youtubeLink: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +49,12 @@ class MealActivity : AppCompatActivity() {
     }
 
     private fun observerMealDetailsLiveData() {
-        mealMvvm.observeMealDetailLiveData().observe(this,object : Observer<Meal>{
+        mealMvvm.observeMealDetailLiveData().observe(this, object : Observer<Meal> {
             override fun onChanged(t: Meal?) {
                 onResponseCase()
                 val meal = t
 
-                binding.tvCategory.text= "Category : ${meal!!.strCategory}"
+                binding.tvCategory.text = "Category : ${meal!!.strCategory}"
                 binding.tvArea.text = "Area : ${meal!!.strArea}"
                 binding.tvInstructionSteps.text = meal.strInstructions
 
@@ -80,7 +80,7 @@ class MealActivity : AppCompatActivity() {
         mealThumb = intent.getStringExtra(HomeFragment.MEAL_THUMB)!!
     }
 
-    private fun loadingCase(){
+    private fun loadingCase() {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnAddToFav.visibility = View.INVISIBLE
         binding.tvInstruction.visibility = View.INVISIBLE
@@ -89,7 +89,8 @@ class MealActivity : AppCompatActivity() {
         binding.imgYoutube.visibility = View.INVISIBLE
 
     }
-    private fun onResponseCase(){
+
+    private fun onResponseCase() {
         binding.progressBar.visibility = View.INVISIBLE
         binding.btnAddToFav.visibility = View.VISIBLE
         binding.tvInstruction.visibility = View.VISIBLE

@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.easyfood.pojo.CategoryList
+import com.example.easyfood.pojo.CategoryMeals
 
 import com.example.easyfood.pojo.Meal
 import com.example.easyfood.pojo.MealList
@@ -15,26 +17,47 @@ import retrofit2.Response
 class HomeViewModel() : ViewModel() {
 
     private var randomMealLiveData = MutableLiveData<Meal>()
-    fun getRandomMeal(){
-        RetrofitInstance.api.getRandomMeal().enqueue(object: Callback<MealList> {
+    private var popularItemsLiveData = MutableLiveData<List<CategoryMeals>>()
+    fun getRandomMeal() {
+        RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
             override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
-                if(response.body() != null){
-                    val randomMeal : Meal = response.body()!!.meals[0]
+                if (response.body() != null) {
+                    val randomMeal: Meal = response.body()!!.meals[0]
                     randomMealLiveData.value = randomMeal
 //                    Log.d("TEST","meal id ${randomMeal.idMeal} name ${randomMeal.strMeal}")
-                } else{
+                } else {
                     return
                 }
             }
 
             override fun onFailure(call: Call<MealList>, t: Throwable) {
-                Log.d("HomeFragment",t.message.toString())
+                Log.d("HomeFragment", t.message.toString())
             }
 
         })
     }
 
-    fun observeRandomMealLiveData() : LiveData<Meal> {
+    fun getPopularItems() {
+
+        RetrofitInstance.api.getPopularItems("SeaFood").enqueue(object : Callback<CategoryList> {
+            override fun onResponse(call: Call<CategoryList>, response: Response<CategoryList>) {
+                if (response.body() != null) {
+                    popularItemsLiveData.value = response.body()!!.meals
+                }
+            }
+
+            override fun onFailure(call: Call<CategoryList>, t: Throwable) {
+                Log.d("HomeFragment", t.message.toString())
+            }
+
+        })
+    }
+
+    fun observeRandomMealLiveData(): LiveData<Meal> {
         return randomMealLiveData
+    }
+
+    fun observerPopularItemsLiveData(): LiveData<List<CategoryMeals>> {
+        return popularItemsLiveData
     }
 }

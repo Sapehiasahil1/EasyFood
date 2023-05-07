@@ -14,26 +14,25 @@ import retrofit2.Response
 
 class MealViewModel() : ViewModel() {
 
-    private var mealDetailLiveData  = MutableLiveData<Meal>()
+    private var mealDetailLiveData = MutableLiveData<Meal>()
 
-    fun getMealDetail(id: String){
-        RetrofitInstance.api.getMealDetails(id).enqueue(object : Callback<MealList>{
+    fun getMealDetail(id: String) {
+        RetrofitInstance.api.getMealDetails(id).enqueue(object : Callback<MealList> {
             override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
-                if(response.body() != null){
+                if (response.body() != null) {
                     mealDetailLiveData.value = response.body()!!.meals[0]
-                }
-                else
+                } else
                     return
             }
 
             override fun onFailure(call: Call<MealList>, t: Throwable) {
-                Log.d("MealActivity" , t.message.toString())
+                Log.d("MealActivity", t.message.toString())
             }
 
         })
     }
 
-    fun observeMealDetailLiveData():LiveData<Meal>{
+    fun observeMealDetailLiveData(): LiveData<Meal> {
         return mealDetailLiveData
     }
 }
